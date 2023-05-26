@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 23:50:40 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/26 17:19:15 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 17:23:44 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	check_eat(t_philo *philo)
 	index = 0;
 	while (index < philo->data->n_philo)
 	{
-		if (philo[index].n_eated < philo->data->n_meal || philo->data->n_meal == -1)
+		if (philo[index].n_eated < philo->data->n_meal || \
+		philo->data->n_meal == -1)
 			return (0);
 		index++;
 	}

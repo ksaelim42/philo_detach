@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 00:26:50 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/26 15:12:51 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 17:42:07 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,9 @@ int	create_thread(t_doctor *doctor)
 	{
 		doctor->index = i;
 		if (pthread_create(&doctor->philo[i].t, NULL, &ft_routine, doctor))
-		{
-			printf("create thread fail\n");
 			return (EXIT_FAILURE);
-		}	
 		if (pthread_detach(doctor->philo[i].t))
-		{
-			printf("detach fail\n");
 			return (EXIT_FAILURE);
-		}
 		usleep (10);
 		i += 2;
 		if (i >= doctor->data.n_philo && i % 2 == 0)

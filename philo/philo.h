@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 01:55:01 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/26 15:29:52 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 17:41:03 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ enum e_fork_stats
 
 typedef struct s_data
 {
-	int		n_philo;
-	int		t_die;
-	int		t_eat;
-	int		t_sleep;
-	int		n_meal;
-	int		philo_end;
-	long	start_time;
+	int				n_philo;
+	int				t_die;
+	int				t_eat;
+	int				t_sleep;
+	int				n_meal;
+	int				philo_end;
+	long			start_time;
 	pthread_mutex_t	print;
 }	t_data;
 

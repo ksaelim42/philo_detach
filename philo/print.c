@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 00:29:46 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/26 16:57:51 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 17:41:35 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	print_action(t_philo *philo, int code)
 
 	pthread_mutex_lock(&philo->data->print);
 	time = time_diff_from_start(philo->data->start_time);
-	printf(BWHITE"\t %ld "NONE FPURPLE"ms\t\t", time_diff_from_start(philo->data->start_time));
+	printf(BWHITE"\t %ld "NONE FPURPLE"ms\t\t", \
+	time_diff_from_start(philo->data->start_time));
 	if (code == EAT)
 		printf(FWHITE"[%d]" FGREEN" is eating", philo->id);
 	else if (code == SLEEP)
