@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 23:15:21 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/25 16:40:53 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 17:08:13 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 
 static int	ft_atoi(char *s)
 {
-	int	num;
+	long	num;
 
 	num = 0;
 	while (*s)
 		num = (num * 10) + (*s++ - '0');
+	if (num > 2147483647)
+	{
+		ft_perror(ARG_ERROR);
+		exit(1);
+	}
 	return (num);
 }
 
@@ -32,7 +37,7 @@ void	init_data(t_data *data, int ac, char **av)
 		data->n_meal = ft_atoi(av[5]);
 	else
 		data->n_meal = -1;
-	data->philo_died = 0;
+	data->philo_end = 0;
 }
 
 t_philo	*init_philo(t_data *data)
@@ -40,6 +45,7 @@ t_philo	*init_philo(t_data *data)
 	int		i;
 	t_philo	*philo;
 
+	philo = NULL;
 	philo = malloc(sizeof(t_philo) * data->n_philo);
 	if (!philo)
 		return (NULL);
@@ -72,6 +78,8 @@ pthread_mutex_t	*init_fork(t_data *data)
 int	ft_init(t_doctor *doctor, int ac, char **av)
 {
 	init_data(&doctor->data, ac, av);
+	if (!doctor->data.n_philo || !doctor->data.t_die)
+		return (ft_perror(ZERO));
 	doctor->philo = init_philo(&doctor->data);
 	if (!doctor->philo)
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 01:55:01 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/25 16:39:15 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:29:52 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ enum e_error
 	ARG_ERROR,
 	ALLOC_ERROR,
 	INIT_ERROR,
+	ZERO,
 };
 
 enum e_philo_status
@@ -71,7 +72,7 @@ typedef struct s_data
 	int		t_eat;
 	int		t_sleep;
 	int		n_meal;
-	int		philo_died;
+	int		philo_end;
 	long	start_time;
 	pthread_mutex_t	print;
 }	t_data;
@@ -98,11 +99,11 @@ typedef struct s_doctor
 int		check_arg(int ac, char **av);
 int		ft_init(t_doctor *doctor, int ac, char **av);
 int		create_thread(t_doctor *doctor);
-void	clear_memory();
-int		print_action(t_philo *philo, int code);
+void	clear_memory(t_doctor *doctor);
+void	print_action(t_philo *philo, int code);
 int		ft_perror(int code);
 long	time_diff_from_start(long start);
 long	current_time(void);
-int		time_use_and_check_die(long time_use, int *died);
+int		time_use_and_check_end(long time_use, int *died);
 
 #endif

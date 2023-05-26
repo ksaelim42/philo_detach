@@ -6,28 +6,28 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 00:26:50 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/25 16:29:23 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:12:51 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	philo_fork_and_check_die(t_philo *philo, pthread_mutex_t *fork, int code)
+int	philo_fork_and_check_end(t_philo *philo, pthread_mutex_t *fork, int code)
 {
 	if (code == TAKE)
 	{
-		if (philo->data->philo_died || pthread_mutex_lock(&fork[philo->right]))
+		if (philo->data->philo_end || pthread_mutex_lock(&fork[philo->right]))
 			return (EXIT_FAILURE);
 		print_action(philo, FORK_R);
-		if (philo->data->philo_died || pthread_mutex_lock(&fork[philo->left]))
+		if (philo->data->philo_end || pthread_mutex_lock(&fork[philo->left]))
 			return (EXIT_FAILURE);
 		print_action(philo, FORK_L);
 	}
 	else if (code == DROP)
 	{
-		if (philo->data->philo_died || pthread_mutex_unlock(&fork[philo->right]))
+		if (philo->data->philo_end || pthread_mutex_unlock(&fork[philo->right]))
 			return (EXIT_FAILURE);
-		if (philo->data->philo_died || pthread_mutex_unlock(&fork[philo->left]))
+		if (philo->data->philo_end || pthread_mutex_unlock(&fork[philo->left]))
 			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -35,15 +35,14 @@ int	philo_fork_and_check_die(t_philo *philo, pthread_mutex_t *fork, int code)
 
 int	philo_eat(t_philo *philo, pthread_mutex_t *fork)
 {
-	if (philo_fork_and_check_die(philo, fork, TAKE))
+	if (philo_fork_and_check_end(philo, fork, TAKE))
 		return (EXIT_FAILURE);
 	philo->n_eated++;
-	if (print_action(philo, EAT))
-		return (EXIT_FAILURE);
+	print_action(philo, EAT);
 	philo->last_meal = current_time();
-	if (time_use_and_check_die(philo->data->t_eat, &philo->data->philo_died))
+	if (time_use_and_check_end(philo->data->t_eat, &philo->data->philo_end))
 		return (EXIT_FAILURE);
-	if (philo_fork_and_check_die(philo, fork, DROP))
+	if (philo_fork_and_check_end(philo, fork, DROP))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -51,7 +50,7 @@ int	philo_eat(t_philo *philo, pthread_mutex_t *fork)
 int	philo_sleep_and_think(t_philo *philo)
 {
 	print_action(philo, SLEEP);
-	if (time_use_and_check_die(philo->data->t_sleep, &philo->data->philo_died))
+	if (time_use_and_check_end(philo->data->t_sleep, &philo->data->philo_end))
 		return (EXIT_FAILURE);
 	print_action(philo, THINK);
 	return (EXIT_SUCCESS);
@@ -64,7 +63,8 @@ void	*ft_routine(void *arg)
 
 	doctor = (t_doctor *)arg;
 	index = doctor->index;
-	while (!doctor->data.philo_died && ((doctor->philo[index].n_eated < doctor->data.n_meal) || doctor->data.n_meal == -1))
+	doctor->philo[index].last_meal = doctor->data.start_time;
+	while (!doctor->data.philo_end)
 	{
 		if (philo_eat(&doctor->philo[index], doctor->fork))
 			break ;
@@ -84,13 +84,22 @@ int	create_thread(t_doctor *doctor)
 	{
 		doctor->index = i;
 		if (pthread_create(&doctor->philo[i].t, NULL, &ft_routine, doctor))
+		{
+			printf("create thread fail\n");
 			return (EXIT_FAILURE);
+		}	
 		if (pthread_detach(doctor->philo[i].t))
+		{
+			printf("detach fail\n");
 			return (EXIT_FAILURE);
+		}
 		usleep (10);
 		i += 2;
-		if (i >= doctor->data.n_meal && i % 2 == 0)
+		if (i >= doctor->data.n_philo && i % 2 == 0)
+		{
 			i = 1;
+			usleep(50);
+		}
 	}
 	return (EXIT_SUCCESS);
 }

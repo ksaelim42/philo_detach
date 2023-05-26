@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 00:08:15 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/25 02:03:07 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 11:19:22 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ long	time_diff_from_start(long start)
 	return (current_time() - start);
 }
 
-int	time_use_and_check_die(long time_use, int *died)
+int	time_use_and_check_end(long time_use, int *end)
 {
 	long	start_time;
 
 	start_time = current_time();
-	while (!(*died) && current_time() - start_time < time_use)
+	while (!(*end) && current_time() - start_time < time_use)
 		usleep(200);
-	return (*died);
+	return (*end);
 }

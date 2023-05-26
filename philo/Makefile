@@ -9,7 +9,7 @@ CFLAGS = -Wall -Werror -Wextra -g -pthread
 OBJS = $(SRCS:.c=.o)
 
 %.o: %.c 
-	$(CC) $(CFLAG) -c $< -o $@ 
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 all: $(NAME)
 

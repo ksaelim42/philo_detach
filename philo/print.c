@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 00:29:46 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/25 16:41:48 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 16:57:51 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@ int	ft_perror(int code)
 		printf(FWHITE"	./philo [num of philo] [time to die] [time to eat] ");
 		printf("[time to sleep] {option: num of meal}\n"NONE);
 	}
+	if (code == ZERO)
+	{
+		printf(SBROWN"that argument shoud not be zero\n"NONE);
+	}
 	return (EXIT_FAILURE);
 }
 
-int	print_action(t_philo *philo, int code)
+void	print_action(t_philo *philo, int code)
 {
 	long	time;
 
@@ -33,26 +37,17 @@ int	print_action(t_philo *philo, int code)
 	time = time_diff_from_start(philo->data->start_time);
 	printf(BWHITE"\t %ld "NONE FPURPLE"ms\t\t", time_diff_from_start(philo->data->start_time));
 	if (code == EAT)
-	{
-		if (philo->n_eated < philo->data->n_meal || philo->data->n_meal == -1)
-			printf(FWHITE"[%d]" FGREEN" %s", philo->id, PRINT_EAT);
-		else if (philo->n_eated == philo->data->n_meal)
-		{
-			printf(FWHITE"[%d]" FGREEN" %s\n"NONE, philo->id, PRINT_EAT_FULL);
-			return (EXIT_FAILURE);
-		}
-	}
+		printf(FWHITE"[%d]" FGREEN" is eating", philo->id);
 	else if (code == SLEEP)
-		printf(FWHITE"[%d]" FCYAN" %s", philo->id, PRINT_SLEEP);
+		printf(FWHITE"[%d]" FCYAN" is sleeping", philo->id);
 	else if (code == THINK)
-		printf(FWHITE"[%d]" PINK" %s", philo->id, PRINT_THINK);
+		printf(FWHITE"[%d]" PINK" is thinking", philo->id);
 	else if (code == FORK_R)
-		printf(FWHITE"[%d]" SYELLOW" %s", philo->id, PRINT_FORK_R);
+		printf(FWHITE"[%d]" SYELLOW" has taken a fork (1/2)", philo->id);
 	else if (code == FORK_L)
-		printf(FWHITE"[%d]" FYELLOW" %s", philo->id, PRINT_FORK_L);
+		printf(FWHITE"[%d]" FYELLOW" has taken a fork (Ready!)", philo->id);
 	else if (code == DIED)
-		printf(FWHITE"[%d]" FRED" %s"NONE, philo->id, PRINT_DIE);
+		printf(FWHITE"[%d]" FRED" died"NONE, philo->id);
 	printf("\n");
 	pthread_mutex_unlock(&philo->data->print);
-	return (EXIT_SUCCESS);
 }

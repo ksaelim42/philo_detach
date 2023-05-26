@@ -6,24 +6,50 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 23:50:40 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/25 16:42:56 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 17:19:15 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	check_die(t_philo *philo)
+int	check_eat(t_philo *philo)
 {
 	int	index;
 
 	index = 0;
-	while (!philo->data->philo_died)
+	while (index < philo->data->n_philo)
 	{
-		if (index >= philo->data->n_meal)
+		if (philo[index].n_eated < philo->data->n_meal || philo->data->n_meal == -1)
+			return (0);
+		index++;
+	}
+	return (1);
+}
+
+int	check_die(t_philo *philo)
+{
+	if (philo->n_eated < philo->data->n_meal || philo->data->n_meal == -1)
+		return (time_diff_from_start(philo->last_meal) > philo->data->t_die);
+	return (0);
+}
+
+void	check_end(t_philo *philo)
+{
+	int	index;
+
+	index = 0;
+	while (!philo->data->philo_end)
+	{
+		if (index >= philo->data->n_philo)
 			index = 0;
-		if (time_diff_from_start(philo[index].last_meal) > philo->data->t_die)
+		if (check_eat(philo))
+		{	
+			philo->data->philo_end = 1;
+			return ;
+		}
+		if (check_die(&philo[index]))
 		{
-			philo->data->philo_died = 1;
+			philo->data->philo_end = 1;
 			print_action(&philo[index], DIED);
 			return ;
 		}
@@ -43,7 +69,7 @@ void	destory_mutex(t_doctor *doctor)
 
 void	clear_memory(t_doctor *doctor)
 {
-	check_die(doctor->philo);
+	check_end(doctor->philo);
 	destory_mutex(doctor);
 	free (doctor->philo);
 	free (doctor->fork);
