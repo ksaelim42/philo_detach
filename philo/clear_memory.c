@@ -6,7 +6,7 @@
 /*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 23:50:40 by ksaelim           #+#    #+#             */
-/*   Updated: 2023/05/26 17:23:44 by ksaelim          ###   ########.fr       */
+/*   Updated: 2023/05/26 18:14:55 by ksaelim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ void	check_end(t_philo *philo)
 			philo->data->philo_end = 1;
 			return ;
 		}
-		if (check_die(&philo[index]))
+		if ((philo[index].n_eated < philo->data->n_meal || \
+		philo->data->n_meal == -1) && (time_diff_from_start(philo->last_meal) \
+		> philo->data->t_die))
 		{
 			philo->data->philo_end = 1;
 			print_action(&philo[index], DIED);
